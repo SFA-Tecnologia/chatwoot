@@ -53,10 +53,10 @@
     },
     "CHAT_SORT_FILTER_ITEMS": {
       "latest": {
-        "TEXT": "Última atividade"
+        "TEXT": "Crescente"
       },
       "sort_on_created_at": {
-        "TEXT": "Criado em"
+        "TEXT": "Decrescente"
       },
       "sort_on_priority": {
         "TEXT": "Prioridade"
