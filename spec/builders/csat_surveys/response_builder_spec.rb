@@ -3,8 +3,17 @@ require 'rails_helper'
 describe CsatSurveys::ResponseBuilder do
   let(:message) do
     create(
-      :message, content_type: :input_csat,
-      content_attributes: { 'submitted_values': { 'csat_survey_response': { 'rating': 10, 'rating_technology': 10, 'feedback_message': 'hello' } } }
+      :message,
+      content_type: :input_csat,
+      content_attributes: {
+        'submitted_values': {
+          'csat_survey_response': {
+            'rating': 10,
+            'rating_technology': 10,
+            'feedback_message': 'hello'
+          }
+        }
+      }
     )
   end
 
