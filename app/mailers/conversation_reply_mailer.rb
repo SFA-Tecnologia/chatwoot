@@ -34,7 +34,7 @@ class ConversationReplyMailer < ApplicationMailer
 
     init_conversation_attributes(message.conversation)
     @message = message
-    @message.content = "**Protocolo:** " + @protocolo + "\n\n" + "**Assunto:** " + @mail_subject + "\n\n" +  message.content + "\n\n Atenciosamente, \n\n Fale com a SEFAZ"
+    @message.content = "**Protocolo:** #{@protocolo}\n\n**Assunto:** #{@mail_subject}\n\n#{message.content}\n\n Atenciosamente, \n\n Fale com a SEFAZ"
     reply_mail_object = prepare_mail(true)
     message.update(source_id: reply_mail_object.message_id)
   end
@@ -62,12 +62,10 @@ class ConversationReplyMailer < ApplicationMailer
     @agent = @conversation.assignee
     @inbox = @conversation.inbox
     @channel = @inbox.channel
-    if @conversation.additional_attributes.has_key?('protocolo')
-      @protocolo = @conversation.additional_attributes['protocolo']
-    end
-    if @conversation.additional_attributes.has_key?('mail_subject')
-      @mail_subject = @conversation.additional_attributes['mail_subject']
-    end
+    @protocolo = @conversation.additional_attributes['protocolo'] if @conversation.additional_attributes.key?('protocolo')
+    return unless @conversation.additional_attributes.key?('mail_subject')
+
+    @mail_subject = @conversation.additional_attributes['mail_subject']
   end
 
   def should_use_conversation_email_address?

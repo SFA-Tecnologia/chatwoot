@@ -60,7 +60,15 @@ class MailPresenter < SimpleDelegator
 
     encoding = @decoded_text_content.encoding
 
-    @decoded_text_content.sub("O emitente desta mensagem é responsável por seu conteúdo e endereçamento. Cabe ao destinatário cuidar quanto ao tratamento adequado. A divulgação, reprodução e distribuição sem a devida autorização, ou qualquer outra ação em desconformidade com as normas internas da Secretaria da Fazenda do Governo do Estado do Piauí (SEFAZ) são proibidas e passíveis de sanção disciplinar, cível e criminal.", "")
+    @decoded_text_content.sub(
+      'O emitente desta mensagem é responsável por seu conteúdo e endereçamento. ' \
+      'Cabe ao destinatário cuidar quanto ao tratamento adequado. A divulgação, ' \
+      'reprodução e distribuição sem a devida autorização, ou qualquer outra ação ' \
+      'em desconformidade com as normas internas da Secretaria da Fazenda do ' \
+      'Governo do Estado do Piauí (SEFAZ) são proibidas e passíveis de sanção ' \
+      'disciplinar, cível e criminal.',
+      ''
+    )
 
     body = EmailReplyTrimmer.trim(@decoded_text_content)
 
@@ -77,7 +85,15 @@ class MailPresenter < SimpleDelegator
     encoded = mail_content(html_part) || ''
     @decoded_html_content = ::HtmlParser.parse_reply(encoded)
 
-    @decoded_html_content.sub("O emitente desta mensagem é responsável por seu conteúdo e endereçamento. Cabe ao destinatário cuidar quanto ao tratamento adequado. A divulgação, reprodução e distribuição sem a devida autorização, ou qualquer outra ação em desconformidade com as normas internas da Secretaria da Fazenda do Governo do Estado do Piauí (SEFAZ) são proibidas e passíveis de sanção disciplinar, cível e criminal.", "")
+    @decoded_html_content.sub(
+      'O emitente desta mensagem é responsável por seu conteúdo e endereçamento. ' \
+      'Cabe ao destinatário cuidar quanto ao tratamento adequado. A divulgação, ' \
+      'reprodução e distribuição sem a devida autorização, ou qualquer outra ação ' \
+      'em desconformidade com as normas internas da Secretaria da Fazenda do ' \
+      'Governo do Estado do Piauí (SEFAZ) são proibidas e passíveis de sanção ' \
+      'disciplinar, cível e criminal.',
+      ''
+    )
 
     return {} if @decoded_html_content.blank? || !html_mail_body?
 

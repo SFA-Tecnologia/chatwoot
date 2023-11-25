@@ -59,7 +59,7 @@ development:
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
     https: false
-    host: 0.0.0.0
+    host: 127.0.0.1
     port: 3035
     public: 0.0.0.0:3035
     hmr: true
@@ -87,7 +87,7 @@ test:
 
   dev_server:
     https: false
-    host: 0.0.0.0
+    host: 127.0.0.1
     port: 3035
     public: 0.0.0.0:3035
     hmr: true

@@ -25,7 +25,8 @@ RSpec.describe 'Public Survey Responses API', type: :request do
       conversation = create(:conversation)
       message = create(:message, conversation: conversation, content_type: 'input_csat')
       # since csat survey is created in async job, we are mocking the creation.
-      create(:csat_survey_response, conversation: conversation, message: message, rating: 8, rating_technology: 8, feedback_message: 'amazing experience')
+      create(:csat_survey_response, conversation: conversation, message: message, rating: 8, rating_technology: 8,
+                                    feedback_message: 'amazing experience')
       patch "/public/api/v1/csat_survey/#{conversation.uuid}",
             params: params,
             as: :json
