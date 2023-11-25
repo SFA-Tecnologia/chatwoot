@@ -38,12 +38,12 @@ const generateFormContent = (contentAttributes, { noResponseText }) => {
 
 const generateCSATContent = (
   contentAttributes,
-  { ratingTitle, feedbackTitle }
+  { ratingTitle, ratingTechTitle, feedbackTitle }
 ) => {
   const {
     submitted_values: { csat_survey_response: surveyResponse = {} } = {},
   } = contentAttributes;
-  const { rating, feedback_message } = surveyResponse || {};
+  const { rating, rating_technology, feedback_message } = surveyResponse || {};
 
   let messageContent = '';
   if (rating) {
@@ -51,7 +51,14 @@ const generateCSATContent = (
       csatRating => csatRating.value === rating
     );
     messageContent += `<div><strong>${ratingTitle}</strong></div>`;
-    messageContent += `<p>${ratingObject.emoji}</p>`;
+    messageContent += `<p>${ratingObject.value}</p>`;
+  }
+  if (rating_technology) {
+    const [ratingTechObject = {}] = CSAT_RATINGS.filter(
+      csatRatingTech => csatRatingTech.value === rating_technology
+    );
+    messageContent += `<div><strong>${ratingTechTitle}</strong></div>`;
+    messageContent += `<p>${ratingTechObject.value}</p>`;
   }
   if (feedback_message) {
     messageContent += `<div><strong>${feedbackTitle}</strong></div>`;
@@ -65,7 +72,7 @@ export const generateBotMessageContent = (
   contentAttributes,
   {
     noResponseText = 'No response',
-    csat: { ratingTitle = 'Rating', feedbackTitle = 'Feedback' } = {},
+    csat: { ratingTitle = 'Conversation Rating', ratingTechTitle = "Technology Rating", feedbackTitle = 'Feedback' } = {},
   } = {}
 ) => {
   const contentTypeMethods = {
@@ -80,6 +87,7 @@ export const generateBotMessageContent = (
     return contentTypeMethod(contentAttributes, {
       noResponseText,
       ratingTitle,
+      ratingTechTitle,
       feedbackTitle,
     });
   }

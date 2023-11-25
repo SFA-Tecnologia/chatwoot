@@ -19,7 +19,8 @@ describe('#updateSurvey', () => {
       message: {
         submitted_values: {
           csat_survey_response: {
-            rating: 4,
+            rating: 8,
+            rating_technology: 8,
             feedback_message: 'amazing',
           },
         },

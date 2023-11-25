@@ -8,7 +8,23 @@ class MailPresenter < SimpleDelegator
   end
 
   def subject
-    encode_to_unicode(@mail.subject)
+    result = encode_to_unicode(@mail.subject)
+    subject_array = result.split('|')
+    if subject_array.length > 1
+      subject_array[1]
+    else
+      result
+    end
+  end
+
+  def protocolo
+    result = encode_to_unicode(@mail.subject)
+    subject_array = result.split('|')
+    if subject_array.length > 1
+      subject_array[2]
+    else
+      result
+    end
   end
 
   # encode decoded mail text_part or html_part if mail is multipart email
@@ -44,6 +60,8 @@ class MailPresenter < SimpleDelegator
 
     encoding = @decoded_text_content.encoding
 
+    @decoded_text_content.sub("O emitente desta mensagem é responsável por seu conteúdo e endereçamento. Cabe ao destinatário cuidar quanto ao tratamento adequado. A divulgação, reprodução e distribuição sem a devida autorização, ou qualquer outra ação em desconformidade com as normas internas da Secretaria da Fazenda do Governo do Estado do Piauí (SEFAZ) são proibidas e passíveis de sanção disciplinar, cível e criminal.", "")
+
     body = EmailReplyTrimmer.trim(@decoded_text_content)
 
     return {} if @decoded_text_content.blank? || !text_mail_body?
@@ -58,6 +76,8 @@ class MailPresenter < SimpleDelegator
   def html_content
     encoded = mail_content(html_part) || ''
     @decoded_html_content = ::HtmlParser.parse_reply(encoded)
+
+    @decoded_html_content.sub("O emitente desta mensagem é responsável por seu conteúdo e endereçamento. Cabe ao destinatário cuidar quanto ao tratamento adequado. A divulgação, reprodução e distribuição sem a devida autorização, ou qualquer outra ação em desconformidade com as normas internas da Secretaria da Fazenda do Governo do Estado do Piauí (SEFAZ) são proibidas e passíveis de sanção disciplinar, cível e criminal.", "")
 
     return {} if @decoded_html_content.blank? || !html_mail_body?
 

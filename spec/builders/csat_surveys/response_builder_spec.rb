@@ -4,7 +4,7 @@ describe CsatSurveys::ResponseBuilder do
   let(:message) do
     create(
       :message, content_type: :input_csat,
-                content_attributes: { 'submitted_values': { 'csat_survey_response': { 'rating': 5, 'feedback_message': 'hello' } } }
+      content_attributes: { 'submitted_values': { 'csat_survey_response': { 'rating': 10, 'rating_technology': 10, 'feedback_message': 'hello' } } }
     )
   end
 
@@ -24,7 +24,8 @@ describe CsatSurveys::ResponseBuilder do
       ).perform
 
       expect(csat_survey_response.id).to eq(existing_survey_response.id)
-      expect(csat_survey_response.rating).to eq(5)
+      expect(csat_survey_response.rating).to eq(10)
+      expect(csat_survey_response.rating_technology).to eq(10)
     end
   end
 end

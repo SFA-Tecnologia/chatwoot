@@ -9,7 +9,7 @@ describe CsatSurveyListener do
     create(
       :message, message_type: 'outgoing', account: account, inbox: inbox, conversation: conversation,
                 content_type: :input_csat,
-                content_attributes: { 'submitted_values': { 'csat_survey_response': { 'rating': 5, 'feedback_message': 'hello' } } }
+                content_attributes: { 'submitted_values': { 'csat_survey_response': { 'rating': 10, 'rating_technology': 10, 'feedback_message': 'hello' } } }
     )
   end
   let!(:event) { Events::Base.new(event_name, Time.zone.now, message: message) }

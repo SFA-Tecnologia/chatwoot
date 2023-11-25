@@ -1,31 +1,31 @@
 <template>
   <div class="csat--table-container">
     <ve-table
-      max-height="calc(100vh - 21.875rem)"
-      :fixed-header="true"
-      :border-around="true"
-      :columns="columns"
-      :table-data="tableData"
+        max-height="calc(100vh - 21.875rem)"
+        :fixed-header="true"
+        :border-around="true"
+        :columns="columns"
+        :table-data="tableData"
     />
     <div v-show="!tableData.length" class="csat--empty-records">
       {{ $t('CSAT_REPORTS.NO_RECORDS') }}
     </div>
     <div v-if="metrics.totalResponseCount" class="table-pagination">
       <ve-pagination
-        :total="metrics.totalResponseCount"
-        :page-index="pageIndex"
-        :page-size="25"
-        :page-size-option="[25]"
-        @on-page-number-change="onPageNumberChange"
+          :total="metrics.totalResponseCount"
+          :page-index="pageIndex"
+          :page-size="25"
+          :page-size-option="[25]"
+          @on-page-number-change="onPageNumberChange"
       />
     </div>
   </div>
 </template>
 <script>
-import { VeTable, VePagination } from 'vue-easytable';
+import {VeTable, VePagination} from 'vue-easytable';
 import UserAvatarWithName from 'dashboard/components/widgets/UserAvatarWithName.vue';
-import { CSAT_RATINGS } from 'shared/constants/messages';
-import { mapGetters } from 'vuex';
+import {CSAT_RATINGS} from 'shared/constants/messages';
+import {mapGetters} from 'vuex';
 import timeMixin from 'dashboard/mixins/time';
 import rtlMixin from 'shared/mixins/rtlMixin';
 
@@ -55,14 +55,14 @@ export default {
           title: this.$t('CSAT_REPORTS.TABLE.HEADER.CONTACT_NAME'),
           align: this.isRTLView ? 'right' : 'left',
           width: 200,
-          renderBodyCell: ({ row }) => {
+          renderBodyCell: ({row}) => {
             if (row.contact) {
               return (
-                <UserAvatarWithName
-                  textClass="text-sm text-slate-800"
-                  size="24px"
-                  user={row.contact}
-                />
+                  <UserAvatarWithName
+                      textClass="text-sm text-slate-800"
+                      size="24px"
+                      user={row.contact}
+                  />
               );
             }
             return '---';
@@ -74,10 +74,10 @@ export default {
           title: this.$t('CSAT_REPORTS.TABLE.HEADER.AGENT_NAME'),
           align: this.isRTLView ? 'right' : 'left',
           width: 200,
-          renderBodyCell: ({ row }) => {
+          renderBodyCell: ({row}) => {
             if (row.assignedAgent) {
               return (
-                <UserAvatarWithName size="24px" user={row.assignedAgent} />
+                  <UserAvatarWithName size="24px" user={row.assignedAgent}/>
               );
             }
             return '---';
@@ -88,13 +88,28 @@ export default {
           key: 'rating',
           title: this.$t('CSAT_REPORTS.TABLE.HEADER.RATING'),
           align: 'center',
-          width: 80,
-          renderBodyCell: ({ row }) => {
+          width: 200,
+          renderBodyCell: ({row}) => {
             const [ratingObject = {}] = CSAT_RATINGS.filter(
-              rating => rating.value === row.rating
+                rating => rating.value === row.rating
             );
             return (
-              <span class="emoji-response">{ratingObject.emoji || '---'}</span>
+                <span class="emoji-response">{ratingObject.value || '---'}</span>
+            );
+          },
+        },
+        {
+          field: 'rating_technology',
+          key: 'rating_technology',
+          title: this.$t('CSAT_REPORTS.TABLE.HEADER.RATING_TECHNOLOGY'),
+          align: 'center',
+          width: 200,
+          renderBodyCell: ({row}) => {
+            const [ratingTechObject = {}] = CSAT_RATINGS.filter(
+                rating_technology => rating_technology.value === row.rating_technology
+            );
+            return (
+                <span class="emoji-response">{ratingTechObject.value || '---'}</span>
             );
           },
         },
@@ -111,20 +126,20 @@ export default {
           title: '',
           align: this.isRTLView ? 'right' : 'left',
           width: 100,
-          renderBodyCell: ({ row }) => {
+          renderBodyCell: ({row}) => {
             const routerParams = {
               name: 'inbox_conversation',
-              params: { conversation_id: row.conversationId },
+              params: {conversation_id: row.conversationId},
             };
             return (
-              <div class="text-right">
-                <router-link to={routerParams}>
-                  {`#${row.conversationId}`}
-                </router-link>
-                <div class="csat--timestamp" v-tooltip={row.createdAt}>
-                  {row.createdAgo}
+                <div className="text-right">
+                  <router-link to={routerParams}>
+                    {`#${row.conversationId}`}
+                  </router-link>
+                  <div className="csat--timestamp" v-tooltip={row.createdAgo}>
+                    {row.createdAt}
+                  </div>
                 </div>
-              </div>
             );
           },
         },
@@ -135,6 +150,7 @@ export default {
         contact: response.contact,
         assignedAgent: response.assigned_agent,
         rating: response.rating,
+        rating_technology: response.rating_technology,
         feedbackText: response.feedback_message || '---',
         conversationId: response.conversation_id,
         createdAgo: this.dynamicTime(response.created_at),

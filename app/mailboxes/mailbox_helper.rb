@@ -92,7 +92,7 @@ module MailboxHelper
       inbox: @inbox,
       contact_attributes: {
         name: identify_contact_name,
-        email: processed_mail.original_sender,
+        email: processed_mail.from.first,
         additional_attributes: {
           source_id: "email:#{processed_mail.message_id}"
         }

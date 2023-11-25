@@ -44,7 +44,8 @@
     "SUCCESS_DELETE_MESSAGE": "Mensagem excluída com sucesso",
     "FAIL_DELETE_MESSSAGE": "Não foi possível excluir a mensagem! Tente novamente",
     "NO_RESPONSE": "Sem resposta",
-    "RATING_TITLE": "Classificação",
+    "RATING_TITLE": "Avaliação da Conversa",
+    "RATING_TECHNOLOGY_TITLE": "Avaliação da Tecnologia",
     "FEEDBACK_TITLE": "Feedback",
     "REPLY_MESSAGE_NOT_FOUND": "Mensagem não disponível",
     "CARD": {

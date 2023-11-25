@@ -4,8 +4,8 @@
   >
     <section class="max-w-5xl mx-auto">
       <img
-        :src="globalConfig.logo"
-        :alt="globalConfig.installationName"
+        src="/brand-assets/logo.png"
+        alt="Teresa 360"
         class="mx-auto h-8 w-auto block dark:hidden"
       />
       <img

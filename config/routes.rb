@@ -358,6 +358,11 @@ Rails.application.routes.draw do
         end
 
         resources :csat_survey, only: [:show, :update]
+        resources :conversations, only: [] do
+          collection do
+            get 'fetch_by_protocolo'
+          end
+        end
       end
     end
   end

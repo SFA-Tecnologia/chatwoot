@@ -414,7 +414,8 @@
       "HEADER": {
         "CONTACT_NAME": "Contato",
         "AGENT_NAME": "Agente atribuído",
-        "RATING": "Classificação",
+        "RATING": "Avaliação da Conversa",
+        "RATING_TECHNOLOGY": "Avaliação da Tecnologia",
         "FEEDBACK_TEXT": "Comentário do feedback"
       }
     },

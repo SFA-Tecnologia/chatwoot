@@ -1,12 +1,14 @@
 {
   "SURVEY": {
-    "DESCRIPTION": "Dear customer 👋, please take a few moments to share feedback about the conversation you had with %{inboxName}.",
+    "DESCRIPTION": "Dear customer 👋, please take a few moments to share feedback about the conversation you had with Teresa.",
     "RATING": {
-      "LABEL": "Rate your conversation",
-      "SUCCESS_MESSAGE": "Thank you for submitting the rating"
+      "LABEL_CONVERSATION": "About the agility, clarity and resolution of the service, what grade would you give?",
+      "LABEL_TECHNOLOGY": "How do you rate the technical part of the service (webpage, application, accessibility, availability, etc.)?",
+      "SUCCESS_MESSAGE": "Thank you for submitting the rating!",
+      "BUTTON_TEXT": "Rate"
     },
     "FEEDBACK": {
-      "LABEL": "Do you have any thoughts you'd like to share?",
+      "LABEL": "Thanks for the review! If you wish, you can leave a comment here.",
       "PLACEHOLDER": "Your feedback (optional)",
       "BUTTON_TEXT": "Submit feedback"
     },

@@ -17,6 +17,7 @@ class Api::V1::Accounts::CsatSurveyResponsesController < Api::V1::Accounts::Base
   def metrics
     @total_count = @csat_survey_responses.count
     @ratings_count = @csat_survey_responses.group(:rating).count
+    @ratings_tech_count = @csat_survey_responses.group(:rating_technology).count
   end
 
   def download

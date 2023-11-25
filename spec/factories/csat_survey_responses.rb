@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :csat_survey_response do
     rating { 1 }
+    rating_technology { 1 }
     feedback_message { Faker::Movie.quote }
     account
     conversation

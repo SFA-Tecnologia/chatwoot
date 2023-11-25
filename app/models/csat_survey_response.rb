@@ -5,6 +5,7 @@
 #  id                :bigint           not null, primary key
 #  feedback_message  :text
 #  rating            :integer          not null
+#  rating_technology :integer          not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  account_id        :bigint           not null
@@ -28,7 +29,8 @@ class CsatSurveyResponse < ApplicationRecord
   belongs_to :message
   belongs_to :assigned_agent, class_name: 'User', optional: true
 
-  validates :rating, presence: true, inclusion: { in: [1, 2, 3, 4, 5] }
+  validates :rating, presence: true, inclusion: { in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
+  validates :rating_technology, presence: true, inclusion: { in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
   validates :account_id, presence: true
   validates :contact_id, presence: true
   validates :conversation_id, presence: true

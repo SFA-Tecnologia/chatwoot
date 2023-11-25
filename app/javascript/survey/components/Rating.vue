@@ -1,16 +1,19 @@
 <template>
-  <div class="customer-satisfcation mb-2">
-    <div class="ratings flex py-5 px-0">
-      <button
-        v-for="rating in ratings"
-        :key="rating.key"
-        :class="buttonClass(rating)"
-        @click="onClick(rating)"
-      >
-        {{ rating.emoji }}
-      </button>
+    <div class="customer-satisfcation mb-2">
+        <div class="ratings flex py-5 px-0">
+            <div v-for="rating in ratings">
+                <input type="radio"
+                       :class="buttonClass(rating)"
+                       :value="rating.value"
+                       :name="radioName"
+                       @click="onClick(rating)"
+                >
+                <label class="text-base font-medium text-black-800 mt-4 mb-4">
+                    {{rating.value}}
+                </label>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -22,20 +25,24 @@ export default {
       type: Number,
       default: null,
     },
+    radioName: {
+        type: String,
+        default: null,
+    },
   },
   data() {
     return {
       ratings: CSAT_RATINGS,
+      ratingValue: null
     };
   },
 
   methods: {
     buttonClass(rating) {
       return [
-        { selected: rating.value === this.selectedRating },
-        { disabled: !!this.selectedRating },
-        { hover: !!this.selectedRating },
-        'emoji-button shadow-none text-3xl lg:text-4xl outline-none mr-8',
+          { checked: rating.value === this.selectedRating },
+          { disabled: !!this.selectedRating },
+          { hover: !!this.selectedRating }
       ];
     },
     onClick(rating) {
@@ -46,6 +53,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+input[type=radio] {
+  margin: 0 10px 10px 10px;
+}
+
+label {
+  display: block;
+  margin: 0 12px 0 12px;
+}
+
 .emoji-button {
   filter: grayscale(100%);
   &.selected,

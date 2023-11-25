@@ -1,6 +1,7 @@
 {
   "CSAT": {
-    "TITLE": "Avalie sua conversa",
+    "TITLE_TECHNOLOGY": "Sobre a parte tecnológica do atendimento (página eletrônica, aplicativo, facilidade de acesso, disponibilidade, etc), que nota você atribui?",
+    "TITLE_CONVERSATION": "Quanto à agilidade, clareza e resolutividade do atendimento, que nota você daria?",
     "PLACEHOLDER": "Conte-nos mais...",
     "RATINGS": {
       "POOR": "😞Ruim",

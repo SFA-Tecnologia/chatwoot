@@ -22,13 +22,14 @@ describe('#generateBotMessageContent', () => {
       generateBotMessageContent('input_csat', {
         submitted_values: {
           csat_survey_response: {
-            rating: 5,
+            rating: 10,
+            rating_technology: 10,
             feedback_message: 'Great Service',
           },
         },
       })
     ).toEqual(
-      '<div><strong>Rating</strong></div><p>😍</p><div><strong>Feedback</strong></div><p>Great Service</p>'
+      '<div><strong>Conversation Rating</strong></div><p>😍</p><div><strong>Technology Rating</strong></div><p>😍</p><div><strong>Feedback</strong></div><p>Great Service</p>'
     );
 
     expect(
@@ -36,10 +37,10 @@ describe('#generateBotMessageContent', () => {
         'input_csat',
         {
           submitted_values: {
-            csat_survey_response: { rating: 1, feedback_message: '' },
+            csat_survey_response: { rating: 1, rating_technology: 1, feedback_message: '' },
           },
         },
-        { csat: { ratingTitle: 'റേറ്റിംഗ്', feedbackTitle: 'പ്രതികരണം' } }
+        { csat: { ratingTitle: 'റേറ്റിംഗ്', ratingTechTitle: 'Technology Rating', feedbackTitle: 'പ്രതികരണം' } }
       )
     ).toEqual('<div><strong>റേറ്റിംഗ്</strong></div><p>😞</p>');
   });

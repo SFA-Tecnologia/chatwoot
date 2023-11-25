@@ -24,7 +24,7 @@ as defined by the routes in the `admin/` namespace
 
 <div class="navigation" role="navigation">
   <div class="logo-brand">
-    <%= link_to image_tag('/brand-assets/logo.svg', alt: 'Chatwoot Admin Dashboard'), super_admin_root_url %>
+    <%= link_to image_tag('/brand-assets/logo.png', alt: 'Chatwoot Admin Dashboard'), super_admin_root_url %>
     <div class="app-version">v<%= Chatwoot.config[:version] %></div>
   </div>
 
@@ -54,17 +54,17 @@ as defined by the routes in the `admin/` namespace
   <hr/>
   <li class="navigation__link">
     <i class="ion ion-help-buoy"></i>
-      <%= link_to "Sources", super_admin_response_sources_url %>  
+      <%= link_to "Sources", super_admin_response_sources_url %>
   </li>
 
     <li class="navigation__link">
     <i class="ion ion-document-text"></i>
-      <%= link_to "Documents", super_admin_response_documents_url %>  
+      <%= link_to "Documents", super_admin_response_documents_url %>
   </li>
 
   <li class="navigation__link">
     <i class="ion ion-help"></i>
-      <%= link_to "Responses", super_admin_responses_url %>  
+      <%= link_to "Responses", super_admin_responses_url %>
   </li>
   <hr/>
   <% end %>
@@ -80,7 +80,7 @@ as defined by the routes in the `admin/` namespace
     </li>
   </ul>
   <ul class="logout">
-   
+
     <li class="navigation__link">
       <i class="ion ion-log-out"></i>
       <%= link_to "Logout", super_admin_logout_url %>

@@ -249,6 +249,7 @@ export default {
           noResponseText: this.$t('CONVERSATION.NO_RESPONSE'),
           csat: {
             ratingTitle: this.$t('CONVERSATION.RATING_TITLE'),
+            ratingTechTitle: this.$t('CONVERSATION.RATING_TECHNOLOGY_TITLE'),
             feedbackTitle: this.$t('CONVERSATION.FEEDBACK_TITLE'),
           },
         }

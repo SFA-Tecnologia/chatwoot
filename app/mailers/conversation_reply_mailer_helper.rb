@@ -72,7 +72,7 @@ module ConversationReplyMailerHelper
   end
 
   def email_from
-    email_microsoft_auth_enabled || email_smtp_enabled ? channel_email_with_name : from_email_with_name
+    ENV.fetch('MAILER_SENDER_EMAIL', 'Chatwoot <accounts@chatwoot.com>')
   end
 
   def email_reply_to

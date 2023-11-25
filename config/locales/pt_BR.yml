@@ -96,7 +96,8 @@ pt_BR:
         contact_phone_number: Telefone de contato
         link_to_the_conversation: Link para a conversa
         agent_name: Nome do Agente
-        rating: Classificação
+        rating: Avaliação da Conversa
+        rating_technology: Avaliação da Tecnologia
         feedback: Comentário de Feedback
         recorded_at: Data de gravação
   notifications:
@@ -142,7 +143,7 @@ pt_BR:
       greeting_message_body: "%{account_name} normalmente responde em algumas horas."
       ways_to_reach_you_message_body: "Informe uma forma para entrarmos em contato com você."
       email_input_box_message_body: "Seja notificado por e-mail"
-      csat_input_message_body: "Por favor, classifique a conversa"
+      csat_input_message_body: "Por favor, avalie o atendimento da SEFAZ-PI"
     reply:
       email:
         header:
@@ -157,7 +158,7 @@ pt_BR:
       email_subject: "Novas mensagens nesta conversa"
       transcript_subject: "Transcrição da conversa"
     survey:
-      response: "Por favor, classifique esta conversa, %{link}"
+      response: "Por favor, avalie o atendimento que você teve com a SEFAZ-PI %{link}"
   contacts:
     online:
       delete: "%{contact_name} está Online, por favor, tente novamente mais tarde"

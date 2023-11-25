@@ -66,6 +66,7 @@ class SupportMailbox < ApplicationMailbox
                                                                                    in_reply_to: in_reply_to,
                                                                                    source: 'email',
                                                                                    mail_subject: @processed_mail.subject,
+                                                                                   protocolo: @processed_mail.protocolo,
                                                                                    initiated_at: {
                                                                                      timestamp: Time.now.utc
                                                                                    }

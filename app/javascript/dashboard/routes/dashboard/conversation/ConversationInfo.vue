@@ -7,6 +7,12 @@
       class="conversation--attribute"
     />
     <contact-details-item
+            v-if="protocolo"
+            :title="$t('CONTACT_PANEL.PROTOCOLO')"
+            :value="protocolo"
+            class="conversation--attribute"
+    />
+    <contact-details-item
       v-if="browserLanguage"
       :title="$t('CONTACT_PANEL.BROWSER_LANGUAGE')"
       :value="browserLanguage"
@@ -100,6 +106,9 @@ export default {
     initiatedAt() {
       return this.conversationAttributes.initiated_at;
     },
+    protocolo() {
+        return this.conversationAttributes.protocolo;
+    },
     browserName() {
       if (!this.conversationAttributes.browser) {
         return '';
@@ -129,6 +138,7 @@ export default {
       const attributes = [
         'initiatedAt',
         'referer',
+        'protocolo',
         'browserName',
         'platformName',
         'ipAddress',

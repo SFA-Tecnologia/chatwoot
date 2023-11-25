@@ -477,6 +477,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_111614) do
     t.bigint "conversation_id", null: false
     t.bigint "message_id", null: false
     t.integer "rating", null: false
+    t.integer "rating_technology", null: false
     t.text "feedback_message"
     t.bigint "contact_id", null: false
     t.bigint "assigned_agent_id"
