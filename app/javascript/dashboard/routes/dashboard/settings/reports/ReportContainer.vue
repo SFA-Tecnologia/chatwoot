@@ -2,6 +2,10 @@
   <div
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-white dark:bg-slate-800 p-2 border border-slate-100 dark:border-slate-700 rounded-md"
   >
+    <div>
+      <h1>{type}</h1>
+      <h1>TESTE</h1>
+    </div>
     <div
       v-for="metric in metrics"
       :key="metric.KEY"
@@ -37,6 +41,7 @@ import format from 'date-fns/format';
 import { formatTime } from '@chatwoot/utils';
 import reportMixin from 'dashboard/mixins/reportMixin';
 import ChartStats from './components/ChartElements/ChartStats.vue';
+
 const REPORTS_KEYS = {
   CONVERSATIONS: 'conversations_count',
   INCOMING_MESSAGES: 'incoming_messages_count',
@@ -51,6 +56,10 @@ export default {
   components: { ChartStats },
   mixins: [reportMixin],
   props: {
+    type: {
+      type: String,
+      default: 'account',
+    },
     groupBy: {
       type: Object,
       default: () => ({}),
