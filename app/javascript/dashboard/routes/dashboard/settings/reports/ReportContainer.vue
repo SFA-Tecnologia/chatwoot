@@ -1,29 +1,25 @@
 <template>
   <div
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-white dark:bg-slate-800 p-2 border border-slate-100 dark:border-slate-700 rounded-md"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-white dark:bg-slate-800 p-2 border border-slate-100 dark:border-slate-700 rounded-md"
   >
-    <div>
-      <h1>{type}</h1>
-      <h1>TESTE</h1>
-    </div>
     <div
-      v-for="metric in metrics"
-      :key="metric.KEY"
-      class="p-4 rounded-md mb-3"
+        v-for="metric in metrics"
+        :key="metric.KEY"
+        class="p-4 rounded-md mb-3"
     >
-      <chart-stats :metric="metric" />
+      <chart-stats :metric="metric"/>
       <div class="mt-4 h-72">
         <woot-loading-state
-          v-if="accountReport.isFetching[metric.KEY]"
-          class="text-xs"
-          :message="$t('REPORT.LOADING_CHART')"
+            v-if="accountReport.isFetching[metric.KEY]"
+            class="text-xs"
+            :message="$t('REPORT.LOADING_CHART')"
         />
         <div v-else class="h-72 flex items-center justify-center">
           <woot-bar
-            v-if="accountReport.data[metric.KEY].length"
-            :collection="getCollection(metric)"
-            :chart-options="getChartOptions(metric)"
-            class="h-72 w-full"
+              v-if="accountReport.data[metric.KEY].length"
+              :collection="getCollection(metric)"
+              :chart-options="getChartOptions(metric)"
+              class="h-72 w-full"
           />
           <span v-else class="text-sm text-slate-600">
             {{ $t('REPORT.NO_ENOUGH_DATA') }}
@@ -35,10 +31,10 @@
 </template>
 
 <script>
-import { GROUP_BY_FILTER, METRIC_CHART } from './constants';
+import {GROUP_BY_FILTER, METRIC_CHART} from './constants';
 import fromUnixTime from 'date-fns/fromUnixTime';
 import format from 'date-fns/format';
-import { formatTime } from '@chatwoot/utils';
+import {formatTime} from '@chatwoot/utils';
 import reportMixin from 'dashboard/mixins/reportMixin';
 import ChartStats from './components/ChartElements/ChartStats.vue';
 
@@ -53,7 +49,7 @@ const REPORTS_KEYS = {
 };
 
 export default {
-  components: { ChartStats },
+  components: {ChartStats},
   mixins: [reportMixin],
   props: {
     type: {
@@ -78,7 +74,7 @@ export default {
       ];
       const infoText = {
         FIRST_RESPONSE_TIME: this.$t(
-          `REPORT.METRICS.FIRST_RESPONSE_TIME.INFO_TEXT`
+            `REPORT.METRICS.FIRST_RESPONSE_TIME.INFO_TEXT`
         ),
         RESOLUTION_TIME: this.$t(`REPORT.METRICS.RESOLUTION_TIME.INFO_TEXT`),
       };
@@ -106,8 +102,8 @@ export default {
           const week_first_date = new Date(week_date.setDate(first_day));
           const week_last_date = new Date(week_date.setDate(last_day));
           return `${format(week_first_date, 'dd-MMM')} - ${format(
-            week_last_date,
-            'dd-MMM'
+              week_last_date,
+              'dd-MMM'
           )}`;
         }
         if (this.groupBy?.period === GROUP_BY_FILTER[3].period) {
@@ -151,7 +147,7 @@ export default {
             return this.$t(metric.TOOLTIP_TEXT, {
               metricValue: formatTime(tooltipItem.yLabel),
               conversationCount:
-                this.accountReport.data[metric.KEY][tooltipItem.index].count,
+              this.accountReport.data[metric.KEY][tooltipItem.index].count,
             });
           },
         };

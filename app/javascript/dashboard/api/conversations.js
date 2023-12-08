@@ -13,6 +13,13 @@ class ConversationApi extends ApiClient {
   updateLabels(conversationID, labels) {
     return axios.post(`${this.url}/${conversationID}/labels`, { labels });
   }
+
+  getReportConversations({ page, from, to, user_ids, inbox_id } = {}) {
+    return axios.get(`${this.url}/get_conversations_by_assignee`, {
+      params: { since: from, until: to,
+        sort: '-created_at', user_ids, inbox_id, page },
+    });
+  }
 }
 
 export default new ConversationApi();

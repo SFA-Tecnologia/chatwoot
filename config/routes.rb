@@ -79,7 +79,9 @@ Rails.application.routes.draw do
               get :meta
               get :search
               post :filter
-            end
+              get :get_conversations_by_assignee
+
+              end
             scope module: :conversations do
               resources :messages, only: [:index, :create, :destroy] do
                 member do

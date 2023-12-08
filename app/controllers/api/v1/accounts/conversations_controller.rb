@@ -1,15 +1,47 @@
 class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseController
   include Events::Types
+  include Sift
   include DateRangeHelper
   include HmacConcern
 
-  before_action :conversation, except: [:index, :meta, :search, :create, :filter]
+  before_action :conversation, except: [:index, :meta, :search, :create, :filter, :get_conversations_by_assignee]
   before_action :inbox, :contact, :contact_inbox, only: [:create]
 
   def index
     result = conversation_finder.perform
     @conversations = result[:conversations]
     @conversations_count = result[:count]
+  end
+
+
+  def get_conversations_by_assignee
+    # conversations = Current.account.conversations.includes(:contact, :assignee).where(assignee_id: params[:user_ids])
+
+    base_query = Current.account.conversations.includes(:contact, :assignee)
+
+    conversations = filtrate(base_query).filter_by_created_at(range)
+                        .filter_by_assigned_agent_id(params[:user_ids])
+                        .filter_by_inbox_id(params[:inbox_id])
+
+    conversations = conversations.page(params[:page] || 1).per(params[:per_page] || 25)
+
+    if conversations.any?
+      render json: {
+        conversations: conversations.as_json(include: {
+          contact: {
+            only: [:id, :name, :email], # Adjust the fields as necessary
+          },
+          assignee: {
+            only: [:id, :name, :email], # Adjust the fields as necessary
+          }
+        }),
+        total_pages: conversations.total_pages,
+        current_page: conversations.current_page,
+        total_count: conversations.total_count
+      }, status: :ok
+    else
+      render json: { message: 'No conversations available' }, status: :no_content
+    end
   end
 
   def meta
