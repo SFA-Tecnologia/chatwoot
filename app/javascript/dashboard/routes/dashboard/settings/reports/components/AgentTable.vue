@@ -7,12 +7,12 @@
         :columns="columns"
         :table-data="tableData"
     />
-    <div v-show="!tableData.length" class="csat--empty-records">
+    <div v-show="conversationsResponses.total_count === 0" class="csat--empty-records">
       {{ $t('CSAT_REPORTS.NO_RECORDS') }}
     </div>
     <div class="table-pagination">
       <ve-pagination
-          :total="conversationsResponses.total_pages"
+          :total="conversationsResponses.total_count"
           :page-index="pageIndex"
           :page-size="25"
           :page-size-option="[25]"

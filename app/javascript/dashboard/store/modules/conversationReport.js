@@ -2,12 +2,17 @@ import ConversationApi from '../../api/conversations';
 import types from '../mutation-types';
 
 export const state = {
-  conversations: [],
+  records: {
+    conversations: [],
+    total_pages: 0,
+    current_page: 0,
+    total_count: 0,
+  },
 }
 
 export const getters = {
   getConversations(_state) {
-    return _state.conversations;
+    return _state.records;
   },
 }
 
@@ -24,7 +29,16 @@ export const actions = {
 
 export const mutations = {
   [types.CONVERSATIONS_BY_ASSIGNEE](_state, payload) {
-    _state.conversations = payload;
+    if (payload === "") {
+      _state.records = {
+        conversations: [],
+        total_pages: 0,
+        current_page: 0,
+        total_count: 0,
+      };
+    } else {
+      _state.records = payload;
+    }
   },
 }
 

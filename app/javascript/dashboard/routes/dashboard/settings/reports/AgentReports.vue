@@ -22,7 +22,6 @@
 <script>
 import ReportFilterSelector from './components/FilterSelector.vue';
 import {mapGetters} from "vuex";
-import {FEATURE_FLAGS} from "../../../../featureFlags";
 import WootButton from "../../../../components/ui/WootButton.vue";
 import AgentTable from "./components/AgentTable.vue";
 import alertMixin from '../../../../../shared/mixins/alertMixin';
@@ -65,7 +64,6 @@ export default {
           page: this.pageIndex,
           ...this.requestPayload,
         });
-
       } catch {
         this.showAlert(this.$t('REPORT.DATA_FETCHING_FAILED'));
       }
@@ -95,6 +93,7 @@ export default {
       this.to = to;
       this.userIds = selectedAgents.map(el => el.id);
       this.inbox = selectedInbox?.id;
+      this.pageIndex = 1;
 
       this.getConversartions();
     },
