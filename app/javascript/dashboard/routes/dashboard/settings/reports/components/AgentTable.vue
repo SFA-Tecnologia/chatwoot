@@ -76,9 +76,9 @@ export default {
       return this.conversationsResponses.conversations.map(conversation => ({
         username: conversation.contact.name,
         protocolo: conversation.additional_attributes.protocolo || '---',
-        datachegada: conversation.created_at,
-        dataatendimento: conversation.first_reply_created_at || '---',
-        status: conversation.status,
+        datachegada: new Date(conversation.created_at).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+        dataatendimento: conversation.first_reply_created_at ? new Date(conversation.first_reply_created_at).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : '---',
+        status: this.$t(`CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.${conversation.status}.TEXT`),
       }));
     },
   },
