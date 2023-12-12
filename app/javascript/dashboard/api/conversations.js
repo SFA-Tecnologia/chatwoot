@@ -19,9 +19,7 @@ class ConversationApi extends ApiClient {
       params: {
         since: from, until: to,
         sort: '-created_at', user_ids, inbox_id, page
-      },
-    }, {
-      responseType: 'blob',
+      }
     });
   }
 
@@ -34,6 +32,7 @@ class ConversationApi extends ApiClient {
         user_ids,
         inbox_id
       },
+      responseType: 'blob',
     });
   }
 }

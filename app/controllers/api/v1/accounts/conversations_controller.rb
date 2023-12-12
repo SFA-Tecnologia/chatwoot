@@ -90,7 +90,7 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
                                         .filter_by_assigned_agent_id(params[:user_ids])
                                         .filter_by_inbox_id(params[:inbox_id])
 
-    render xlsx: 'download_xlsx', template: '/api/v1/accounts/conversations/get_xlsx', filename: 'relatorio.xlsx'
+    render xlsx: 'download_xlsx', template: '/api/v1/accounts/conversations/get_xlsx', filename: 'relatorio.xlsx', disposition: 'attachment'
   end
 
   def transcript
