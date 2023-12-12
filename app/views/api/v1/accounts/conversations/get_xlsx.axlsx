@@ -1,0 +1,18 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Atendimentos") do |sheet|
+  sheet.add_row ["Nome do Usuário", "Protocolo", "Data de Chegada", "Data de Atendimento", "Status"]
+  @conversations.each do |conversation|
+      protocolo = conversation.additional_attributes['protocolo'] || '---'
+      created_at_formatted = conversation.created_at || '---'
+      first_reply_at_formatted = conversation.first_reply_created_at || '---'
+      status_text = I18n.t("chat_list.chat_status_filter_items.#{conversation.status}.text")
+
+      sheet.add_row [
+        conversation.contact.name,
+        protocolo,
+        created_at_formatted,
+        first_reply_at_formatted,
+        status_text
+      ]
+    end
+end

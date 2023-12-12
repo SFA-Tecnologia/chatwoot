@@ -17,6 +17,16 @@
 #To learn more, please read the Rails Internationalization guide
 #available at https://guides.rubyonrails.org/i18n.html.
 pt_BR:
+  chat_list:
+    chat_status_filter_items:
+      open:
+        text: "Aberta"
+      resolved:
+        text: "Resolvido"
+      pending:
+        text: "Pendente"
+      snoozed:
+        text: "Adiado"
   hello: "Olá, mundo"
   messages:
     reset_password_success: Legal! A solicitação de alteração de senha foi bem sucedida. Verifique seu e-mail para obter instruções.

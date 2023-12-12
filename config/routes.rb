@@ -80,6 +80,7 @@ Rails.application.routes.draw do
               get :search
               post :filter
               get :get_conversations_by_assignee
+              get :get_xlsx
 
               end
             scope module: :conversations do
