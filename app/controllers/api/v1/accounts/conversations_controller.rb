@@ -4,7 +4,7 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
   include DateRangeHelper
   include HmacConcern
 
-  before_action :conversation, except: [:index, :meta, :search, :create, :filter, :get_conversations_by_assignee, :get_xlsx]
+  before_action :conversation, except: [:index, :meta, :search, :create, :filter, :get_conversations_by_assignee, :download_xlsx]
   before_action :inbox, :contact, :contact_inbox, only: [:create]
 
   def index
@@ -83,14 +83,14 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
     head :ok
   end
 
-  def get_xlsx
+  def download_xlsx
     base_query = Current.account.conversations.includes(:contact, :assignee)
 
     @conversations = filtrate(base_query).filter_by_created_at(range)
                                         .filter_by_assigned_agent_id(params[:user_ids])
                                         .filter_by_inbox_id(params[:inbox_id])
 
-    render xlsx: 'get_xlsx', template: '/api/v1/accounts/conversations/get_xlsx', filename: 'relatorio.xlsx'
+    render xlsx: 'download_xlsx', template: '/api/v1/accounts/conversations/get_xlsx', filename: 'relatorio.xlsx'
   end
 
   def transcript

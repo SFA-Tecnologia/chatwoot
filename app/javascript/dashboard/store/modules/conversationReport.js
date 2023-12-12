@@ -25,6 +25,21 @@ export const actions = {
       console.log(error);
     }
   },
+  downloadXlsx: async function ({commit}, params) {
+    try {
+      const response = await ConversationApi.downloadXlsx(params);
+      const blob = new Blob([response.data]);
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.setAttribute('download', 'relatorio.xlsx');
+      link.setAttribute('href', url);
+      link.click();
+      return link;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 }
 
 export const mutations = {

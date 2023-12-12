@@ -26,6 +26,7 @@ import WootButton from "../../../../components/ui/WootButton.vue";
 import AgentTable from "./components/AgentTable.vue";
 import alertMixin from '../../../../../shared/mixins/alertMixin';
 import {REPORTS_EVENTS} from "../../../../helper/AnalyticsHelper/events";
+import {generateFileName} from "../../../../helper/downloadHelper";
 
 export default {
   components: {
@@ -69,7 +70,11 @@ export default {
       }
     },
     downloadReports() {
-      console.info('TESTE');
+        try {
+            this.$store.dispatch('conversationReport/downloadXlsx', this.requestPayload);
+        } catch (error) {
+            this.showAlert(this.$t('REPORT.CSAT_REPORTS.DOWNLOAD_FAILED'));
+        }
     },
     onPageNumberChange(pageIndex) {
       this.pageIndex = pageIndex;

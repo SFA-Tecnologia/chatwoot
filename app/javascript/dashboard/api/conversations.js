@@ -3,7 +3,7 @@ import ApiClient from './ApiClient';
 
 class ConversationApi extends ApiClient {
   constructor() {
-    super('conversations', { accountScoped: true });
+    super('conversations', {accountScoped: true});
   }
 
   getLabels(conversationID) {
@@ -11,13 +11,29 @@ class ConversationApi extends ApiClient {
   }
 
   updateLabels(conversationID, labels) {
-    return axios.post(`${this.url}/${conversationID}/labels`, { labels });
+    return axios.post(`${this.url}/${conversationID}/labels`, {labels});
   }
 
-  getReportConversations({ page, from, to, user_ids, inbox_id } = {}) {
+  getReportConversations({page, from, to, user_ids, inbox_id} = {}) {
     return axios.get(`${this.url}/get_conversations_by_assignee`, {
-      params: { since: from, until: to,
-        sort: '-created_at', user_ids, inbox_id, page },
+      params: {
+        since: from, until: to,
+        sort: '-created_at', user_ids, inbox_id, page
+      },
+    }, {
+      responseType: 'blob',
+    });
+  }
+
+  downloadXlsx({from, to, user_ids, inbox_id} = {}) {
+    return axios.get(`${this.url}/download_xlsx`, {
+      params: {
+        since: from,
+        until: to,
+        sort: '-created_at',
+        user_ids,
+        inbox_id
+      },
     });
   }
 }
