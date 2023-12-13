@@ -829,7 +829,10 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    wicked_pdf (2.7.0)
+      activesupport
     wisper (2.0.0)
+    wkhtmltopdf-binary (0.12.6.6)
     working_hours (1.4.1)
       activesupport (>= 3.2)
       tzinfo
@@ -972,7 +975,9 @@ DEPENDENCIES
   web-push
   webmock
   webpacker
+  wicked_pdf
   wisper (= 2.0.0)
+  wkhtmltopdf-binary
   working_hours
 
 RUBY VERSION

@@ -81,6 +81,7 @@ Rails.application.routes.draw do
               post :filter
               get :get_conversations_by_assignee
               get :download_xlsx
+              get :download_pdf
 
               end
             scope module: :conversations do

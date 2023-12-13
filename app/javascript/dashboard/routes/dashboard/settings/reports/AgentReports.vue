@@ -1,23 +1,40 @@
 <template>
-  <div class="flex-1 overflow-auto p-4">
-    <report-filter-selector
-        :show-agents-filter="true"
-        :show-inbox-filter="true"
-        :show-business-hours-switch="false"
-        @filter-change="onFilterChange"
-    />
-    <woot-button
-        color-scheme="success"
-        class-names="button--fixed-top"
-        icon="arrow-download"
-        @click="downloadReports"
-    >
-      {{ $t('REPORT.DOWNLOAD_AGENT_REPORTS') }}
-    </woot-button>
-    <agent-table :page-index="pageIndex" @page-change="onPageNumberChange"/>
-  </div>
+    <div class="flex-1 overflow-auto p-4">
+        <div class="flex justify-between items-center mb-4">
+            <!-- Filters on the Left, with flex-grow to take available space -->
+            <div class="flex-grow">
+                <report-filter-selector
+                        :show-agents-filter="true"
+                        :show-inbox-filter="true"
+                        :show-business-hours-switch="false"
+                        @filter-change="onFilterChange"
+                />
+            </div>
 
+            <!-- Buttons on the Right -->
+            <div class="flex items-center space-x-2">
+                <woot-button
+                        color-scheme="success"
+                        icon="arrow-download"
+                        @click="downloadXLSXReports"
+                >
+                    {{ $t('REPORT.DOWNLOAD_AGENT_REPORTS.XLSX') }}
+                </woot-button>
+                <woot-button
+                        color-scheme="success"
+                        icon="arrow-download"
+                        @click="downloadPDFReports"
+                >
+                    {{ $t('REPORT.DOWNLOAD_AGENT_REPORTS.PDF') }}
+                </woot-button>
+            </div>
+        </div>
+
+        <!-- Agent Table -->
+        <agent-table :page-index="pageIndex" @page-change="onPageNumberChange"/>
+    </div>
 </template>
+
 
 <script>
 import ReportFilterSelector from './components/FilterSelector.vue';
@@ -26,7 +43,6 @@ import WootButton from "../../../../components/ui/WootButton.vue";
 import AgentTable from "./components/AgentTable.vue";
 import alertMixin from '../../../../../shared/mixins/alertMixin';
 import {REPORTS_EVENTS} from "../../../../helper/AnalyticsHelper/events";
-import {generateFileName} from "../../../../helper/downloadHelper";
 
 export default {
   components: {
@@ -69,12 +85,19 @@ export default {
         this.showAlert(this.$t('REPORT.DATA_FETCHING_FAILED'));
       }
     },
-    downloadReports() {
-        try {
-            this.$store.dispatch('conversationReport/downloadXlsx', this.requestPayload);
-        } catch (error) {
-            this.showAlert(this.$t('REPORT.CSAT_REPORTS.DOWNLOAD_FAILED'));
-        }
+    downloadXLSXReports() {
+      try {
+        this.$store.dispatch('conversationReport/downloadXlsx', this.requestPayload);
+      } catch (error) {
+        this.showAlert(this.$t('AGENT_REPORTS.DOWNLOAD_FAILED'));
+      }
+    },
+    downloadPDFReports() {
+      try {
+        this.$store.dispatch('conversationReport/downloadPDF', this.requestPayload);
+      } catch (error) {
+        this.showAlert(this.$t('AGENT_REPORTS.DOWNLOAD_FAILED'));
+      }
     },
     onPageNumberChange(pageIndex) {
       this.pageIndex = pageIndex;

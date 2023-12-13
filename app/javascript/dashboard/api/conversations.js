@@ -35,6 +35,19 @@ class ConversationApi extends ApiClient {
       responseType: 'blob',
     });
   }
+
+  downloadPDF({from, to, user_ids, inbox_id} = {}) {
+    return axios.get(`${this.url}/download_pdf`, {
+      params: {
+        since: from,
+        until: to,
+        sort: '-created_at',
+        user_ids,
+        inbox_id
+      },
+      responseType: 'blob',
+    });
+  }
 }
 
 export default new ConversationApi();

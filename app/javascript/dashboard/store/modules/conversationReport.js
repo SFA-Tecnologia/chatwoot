@@ -40,6 +40,21 @@ export const actions = {
       console.log(error);
     }
   },
+  downloadPDF: async function ({commit}, params) {
+    try {
+      const response = await ConversationApi.downloadPDF(params);
+      const blob = new Blob([response.data]);
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.setAttribute('download', 'relatorio.pdf');
+      link.setAttribute('href', url);
+      link.click();
+      return link;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 }
 
 export const mutations = {

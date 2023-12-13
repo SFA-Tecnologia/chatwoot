@@ -243,3 +243,6 @@ end
 
 gem 'caxlsx'
 gem 'caxlsx_rails'
+
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
