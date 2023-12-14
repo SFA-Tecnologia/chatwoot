@@ -1,3 +1,5 @@
 /spec
 /vendor
 /tmp
+/log
+/node_modules
