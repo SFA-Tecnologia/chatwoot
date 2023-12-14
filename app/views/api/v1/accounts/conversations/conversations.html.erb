@@ -11,8 +11,59 @@
     }
 
     .header {
+      overflow: auto;
+      /* Clearfix for floated children */
+      display: inline-block;
+      /* Adjusts width to fit content */
       text-align: center;
-      margin-bottom: 40px;
+    }
+
+    .text {
+      overflow: auto;
+      /* Clearfix for floated children */
+      display: inline-block;
+      /* Adjusts width to fit content */
+      text-align: center;
+      background-color: #009688;
+      padding-top: 10px;
+    }
+
+    .avatar,
+    .header h1 {
+      margin: 0;
+      /* Remove default margin */
+      float: left;
+      /* Float elements to the left */
+      display: inline-block;
+      /* Display as inline block */
+      vertical-align: middle;
+      /* Vertically align the inline elements */
+
+    }
+
+    .header h1 {
+      height: 51px;
+    }
+
+    /* Other styles remain the same */
+
+    .avatarimg {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-bottom: -3px;
+    }
+
+    .avatar {
+      background-color: #009688;
+      padding: 5px;
+      margin-right: 5px;
+    }
+
+    .header h1 {
+      color: white;
+      padding: 0 10px;
+      /* Space around the text */
     }
 
     .content {
@@ -37,7 +88,16 @@
 </head>
 <body>
 <header>
-  <h1>Teresa 360º</h1>
+  <div class="header">
+    <div class="avatar">
+      <!-- Replace 'path_to_avatar_image.jpg' with the actual path to the avatar image -->
+      <img class="avatarimg" src="https://teresa-icons.s3.us-south.cloud-object-storage.appdomain.cloud/img_app_teresa.png" alt="Avatar">
+    </div>
+    <div class="text">
+      <h1>Teresa 360º</h1>
+      <h1>Atendimentos por agentes</h1>
+    </div>
+  </div>
   <% if @assigned_agent_name %>
     <p>Agente: <%= @assigned_agent_name %></p>
   <% end %>
