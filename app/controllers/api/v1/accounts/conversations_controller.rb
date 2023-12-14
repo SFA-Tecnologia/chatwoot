@@ -7,6 +7,8 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
   before_action :conversation, except: [:index, :meta, :search, :create, :filter, :get_conversations_by_assignee, :download_xlsx, :download_pdf]
   before_action :inbox, :contact, :contact_inbox, only: [:create]
 
+  sort_on :created_at, type: :datetime
+
   def index
     result = conversation_finder.perform
     @conversations = result[:conversations]
