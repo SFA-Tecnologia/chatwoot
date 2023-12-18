@@ -104,6 +104,8 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
     # Assuming you have a method or a way to get the assigned agent's name
     @assigned_agent_name = get_assigned_agent_name(params[:user_ids])
 
+    @total_conversations = @conversations.count
+
     # Passing the date range
     start_date = range.begin
     end_date = range.end
@@ -125,6 +127,8 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
 
     # Assuming you have a method or a way to get the assigned agent's name
     @assigned_agent_name = get_assigned_agent_name(params[:user_ids])
+
+    @total_conversations = @conversations.count
 
     # Passing the date range
     start_date = range.begin

@@ -15,6 +15,10 @@ wb.add_worksheet(name: "Atendimentos") do |sheet|
     row.add_cell "Data:", style: type_style
     row.add_cell @date_range || '---', style: type_regular_style
   end
+  sheet.add_row do |row|
+    row.add_cell "Total de Atendimentos:", style: type_style
+    row.add_cell @total_conversations || '---' , style: type_regular_style
+  end
 
   # Adding an empty row for spacing (optional)
   sheet.add_row []
