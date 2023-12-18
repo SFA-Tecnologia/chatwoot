@@ -108,7 +108,7 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
 
     # Passing the date range
     start_date = range.begin
-    end_date = range.end
+    end_date = range.end - 1.day
 
     formatted_start_date = start_date.strftime('%d/%m/%Y')
     formatted_end_date = end_date.strftime('%d/%m/%Y')
@@ -132,7 +132,7 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
 
     # Passing the date range
     start_date = range.begin
-    end_date = range.end
+    end_date = range.end - 1.day
 
     formatted_start_date = start_date.strftime('%d/%m/%Y')
     formatted_end_date = end_date.strftime('%d/%m/%Y')
