@@ -124,8 +124,8 @@
       <tr>
         <td><%= conversation.contact.name %></td>
         <td><%= conversation.additional_attributes['protocolo'] || '---' %></td>
-        <td><%= conversation.created_at ? conversation.created_at.strftime('%d/%m/%Y %H:%M') : '---' %></td>
-        <td><%= conversation.first_reply_created_at ? conversation.first_reply_created_at.strftime('%d/%m/%Y %H:%M') : '---' %></td>
+        <td><%= conversation.created_at ? conversation.created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%Y %H:%M') : '---' %></td>
+        <td><%= conversation.first_reply_created_at ? conversation.first_reply_created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%Y %H:%M') : '---' %></td>
         <td><%= I18n.t("chat_list.chat_status_filter_items.#{conversation.status}.text") %></td>
       </tr>
     <% end %>
