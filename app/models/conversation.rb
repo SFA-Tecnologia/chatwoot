@@ -5,6 +5,7 @@
 #  id                     :integer          not null, primary key
 #  additional_attributes  :jsonb
 #  agent_last_seen_at     :datetime
+#  assigned_at            :datetime
 #  assignee_last_seen_at  :datetime
 #  contact_last_seen_at   :datetime
 #  custom_attributes      :jsonb
@@ -150,7 +151,7 @@ class Conversation < ApplicationRecord
   end
 
   def update_assignee(agent = nil)
-    update!(assignee: agent)
+    update!(assignee: agent, assigned_at: Time.current)
   end
 
   def toggle_status
@@ -158,6 +159,12 @@ class Conversation < ApplicationRecord
     self.status = open? ? :resolved : :open
     self.status = :open if pending? || snoozed?
     save
+  end
+
+  def can_be_updated_by?(current_agent_id)
+    return true if self.assignee_id == current_agent_id
+    return Time.current > self.assigned_at + 3.hours if self.assigned_at
+    false
   end
 
   def toggle_priority(priority = nil)

@@ -10,6 +10,14 @@
       :action-button-label="$t('CONVERSATION.ASSIGN_TO_ME')"
       @click="onClickSelfAssign"
     />
+    <banner
+        v-if="showOtherAssignedBanner"
+        action-button-variant="clear"
+        color-scheme="secondary"
+        class="banner--self-assign"
+        :banner-message="customBannerMessage"
+        :has-action-button="false"
+    />
     <reply-top-panel
       :mode="replyType"
       :set-reply-mode="setReplyMode"
@@ -259,6 +267,8 @@ export default {
       showVariablesMenu: false,
       newConversationModalActive: false,
       showArticleSearchPopover: false,
+      showAssignedToOther: false,
+      customMessage: '',
     };
   },
   computed: {
@@ -277,6 +287,9 @@ export default {
         !this.isPrivate &&
         this.inboxHasFeature(INBOX_FEATURES.REPLY_TO)
       );
+    },
+    customBannerMessage() {
+      return this.customMessage;
     },
     showRichContentEditor() {
       if (this.isOnPrivateNote || this.isRichEditorEnabled) {
@@ -310,16 +323,10 @@ export default {
       },
     },
     showSelfAssignBanner() {
-      if (this.message !== '' && !this.isOnPrivateNote) {
-        if (!this.assignedAgent) {
-          return true;
-        }
-        if (this.assignedAgent.id !== this.currentUser.id) {
-          return true;
-        }
-      }
-
       return false;
+    },
+    showOtherAssignedBanner(){
+      return this.showAssignedToOther;
     },
     hasWhatsappTemplates() {
       return !!this.$store.getters['inboxes/getWhatsAppTemplates'](this.inboxId)
@@ -833,20 +840,28 @@ export default {
       }
     },
     async sendMessage(messagePayload) {
-      try {
-        await this.$store.dispatch(
-          'createPendingMessageAndSend',
-          messagePayload
-        );
-        bus.$emit(BUS_EVENTS.SCROLL_TO_MESSAGE);
-        bus.$emit(BUS_EVENTS.MESSAGE_SENT);
-        this.removeFromDraft();
-        this.sendMessageAnalyticsData(messagePayload.private);
-      } catch (error) {
-        const errorMessage =
-          error?.response?.data?.error || this.$t('CONVERSATION.MESSAGE_ERROR');
-        this.showAlert(errorMessage);
+      const canUpdateResponse = await axios.get(`/api/v1/accounts/1/conversations/${this.conversationId}/can_be_updated_by`);
+
+      if (canUpdateResponse.data.can_be_updated_by) {
+        try {
+          await this.$store.dispatch(
+              'createPendingMessageAndSend',
+              messagePayload
+          );
+          bus.$emit(BUS_EVENTS.SCROLL_TO_MESSAGE);
+          bus.$emit(BUS_EVENTS.MESSAGE_SENT);
+          this.removeFromDraft();
+          this.sendMessageAnalyticsData(messagePayload.private);
+        } catch (error) {
+          const errorMessage =
+              error?.response?.data?.error || this.$t('CONVERSATION.MESSAGE_ERROR');
+          this.showAlert(errorMessage);
+        }
+      } else {
+        this.showAssignedToOther = true;
+        this.customMessage = `Este protocolo já está atribuído para ${this.assignedAgent.name}. Caso deseje, entre em contato com este(a) agente`;
       }
+
     },
     async onSendWhatsAppReply(messagePayload) {
       this.sendMessage({

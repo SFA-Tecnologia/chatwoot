@@ -8,6 +8,7 @@
         icon="checkmark"
         emoji="✅"
         :is-loading="isLoading"
+        :disabled="!canPerformAction"
         @click="onCmdResolveConversation"
       >
         {{ $t('CONVERSATION.HEADER.RESOLVE_ACTION') }}
@@ -76,6 +77,7 @@
     <woot-modal
       :show.sync="showCustomSnoozeModal"
       :on-close="hideCustomSnoozeModal"
+      checkCanPerformAction
     >
       <custom-snooze-modal
         @close="hideCustomSnoozeModal"
@@ -122,6 +124,7 @@ export default {
       showActionsDropdown: false,
       STATUS_TYPE: wootConstants.STATUS_TYPE,
       showCustomSnoozeModal: false,
+      canPerformAction: true
     };
   },
   computed: {
@@ -145,20 +148,31 @@ export default {
       return '';
     },
     showAdditionalActions() {
-      return !this.isPending && !this.isSnoozed;
+      return !this.isPending && !this.isSnoozed && this.canPerformAction;
     },
   },
   mounted() {
     bus.$on(CMD_SNOOZE_CONVERSATION, this.onCmdSnoozeConversation);
     bus.$on(CMD_REOPEN_CONVERSATION, this.onCmdOpenConversation);
     bus.$on(CMD_RESOLVE_CONVERSATION, this.onCmdResolveConversation);
+    this.checkCanPerformAction();
   },
   destroyed() {
     bus.$off(CMD_SNOOZE_CONVERSATION, this.onCmdSnoozeConversation);
     bus.$off(CMD_REOPEN_CONVERSATION, this.onCmdOpenConversation);
     bus.$off(CMD_RESOLVE_CONVERSATION, this.onCmdResolveConversation);
+
   },
   methods: {
+    async checkCanPerformAction() {
+      try {
+        const response = await axios.get(`/api/v1/accounts/1/conversations/${this.conversationId}/can_be_updated_by`);
+        this.canPerformAction = response.data.can_be_updated_by;
+      } catch (error) {
+        console.error('Failed to check if action is allowed:', error);
+        this.canPerformAction = false; // Assume false on error
+      }
+    },
     async handleKeyEvents(e) {
       const allConversations = document.querySelectorAll(
         '.conversations-list .conversation'

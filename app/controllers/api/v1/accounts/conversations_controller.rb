@@ -95,6 +95,13 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
     head :ok
   end
 
+  def can_be_updated_by
+    conversation = Conversation.find(params[:id])
+    can_update = conversation.can_be_updated_by?(Current.user&.id)
+
+    render json: { can_be_updated_by: can_update }
+  end
+
   def download_xlsx
     base_query = Current.account.conversations.includes(:contact, :assignee)
 
