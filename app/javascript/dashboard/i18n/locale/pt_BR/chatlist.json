@@ -20,7 +20,7 @@
     },
     "CHAT_STATUS_FILTER_ITEMS": {
       "open": {
-        "TEXT": "Abertas"
+        "TEXT": "Aberta"
       },
       "resolved": {
         "TEXT": "Resolvida"

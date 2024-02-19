@@ -8,7 +8,7 @@
       >
         <template v-slot:button>
           <woot-button
-            v-if="showSelfAssign"
+            v-if="showSelfAssign && canSelfAssign"
             icon="arrow-right"
             variant="link"
             size="small"
@@ -21,6 +21,7 @@
       <multiselect-dropdown
         :options="agentsList"
         :selected-item="assignedAgent"
+        :disabled="!canSelfAssign"
         :multiselector-title="$t('AGENT_MGMT.MULTI_SELECTOR.TITLE.AGENT')"
         :multiselector-placeholder="$t('AGENT_MGMT.MULTI_SELECTOR.PLACEHOLDER')"
         :no-search-result="
@@ -40,6 +41,7 @@
       <multiselect-dropdown
         :options="teamsList"
         :selected-item="assignedTeam"
+        :disabled="!canSelfAssign"
         :multiselector-title="$t('AGENT_MGMT.MULTI_SELECTOR.TITLE.TEAM')"
         :multiselector-placeholder="$t('AGENT_MGMT.MULTI_SELECTOR.PLACEHOLDER')"
         :no-search-result="
@@ -110,6 +112,7 @@ export default {
   },
   data() {
     return {
+      canSelfAssign: true,
       priorityOptions: [
         {
           id: null,
@@ -220,7 +223,20 @@ export default {
       return false;
     },
   },
+  mounted() {
+    this.checkCanSelfAssign();
+  },
   methods: {
+    async checkCanSelfAssign() {
+      try {
+        // Replace `yourApiCallToCheckCanSelfAssign` with your actual API call
+        const response = await axios.get(`/api/v1/accounts/1/conversations/${this.conversationId}/can_be_updated_by`);
+        this.canSelfAssign = response.data.can_be_updated_by;
+      } catch (error) {
+        console.error('Failed to check if self-assign is allowed:', error);
+        this.canSelfAssign = true; // Assume false on error
+      }
+    },
     onSelfAssign() {
       const {
         account_id,

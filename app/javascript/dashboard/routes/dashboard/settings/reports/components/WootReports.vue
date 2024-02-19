@@ -19,7 +19,11 @@
       @group-by-filter-change="onGroupByFilterChange"
       @business-hours-toggle="onBusinessHoursToggle"
     />
-    <report-container v-if="filterItemsList.length" :group-by="groupBy" />
+    <report-container
+      v-if="filterItemsList.length"
+      :group-by="groupBy"
+      :type="type"
+    />
   </div>
 </template>
 

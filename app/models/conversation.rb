@@ -5,6 +5,7 @@
 #  id                     :integer          not null, primary key
 #  additional_attributes  :jsonb
 #  agent_last_seen_at     :datetime
+#  assigned_at            :datetime
 #  assignee_last_seen_at  :datetime
 #  contact_last_seen_at   :datetime
 #  custom_attributes      :jsonb
@@ -94,6 +95,11 @@ class Conversation < ApplicationRecord
   belongs_to :team, optional: true
   belongs_to :campaign, optional: true
 
+  scope :filter_by_created_at, ->(range) { where(created_at: range) if range.present? }
+  scope :filter_by_assigned_agent_id, ->(user_ids) { where(assignee_id: user_ids) if user_ids.present? }
+  scope :filter_by_inbox_id, ->(inbox_id) { where(inbox_id: inbox_id) if inbox_id.present? }
+  scope :filter_by_team_id, ->(team_id) { where(team_id: team_id) if team_id.present? }
+
   has_many :mentions, dependent: :destroy_async
   has_many :messages, dependent: :destroy_async, autosave: true
   has_one :csat_survey_response, dependent: :destroy_async
@@ -145,7 +151,7 @@ class Conversation < ApplicationRecord
   end
 
   def update_assignee(agent = nil)
-    update!(assignee: agent)
+    update!(assignee: agent, assigned_at: Time.current)
   end
 
   def toggle_status
@@ -153,6 +159,12 @@ class Conversation < ApplicationRecord
     self.status = open? ? :resolved : :open
     self.status = :open if pending? || snoozed?
     save
+  end
+
+  def can_be_updated_by?(current_agent_id)
+    return true if self.assignee_id == current_agent_id
+    return Time.current > self.assigned_at + 3.hours if self.assigned_at
+    false
   end
 
   def toggle_priority(priority = nil)
@@ -248,7 +260,7 @@ class Conversation < ApplicationRecord
     (
       previous_changes.keys.intersect?(%w[team_id assignee_id status snoozed_until custom_attributes label_list waiting_since first_reply_created_at
                                           priority]) ||
-      (previous_changes['additional_attributes'].present? && previous_changes['additional_attributes'][1].keys.intersect?(%w[conversation_language]))
+        (previous_changes['additional_attributes'].present? && previous_changes['additional_attributes'][1].keys.intersect?(%w[conversation_language]))
     )
   end
 
@@ -274,8 +286,8 @@ class Conversation < ApplicationRecord
 
   def dispatcher_dispatch(event_name, changed_attributes = nil)
     Rails.configuration.dispatcher.dispatch(event_name, Time.zone.now, conversation: self, notifiable_assignee_change: notifiable_assignee_change?,
-                                                                       changed_attributes: changed_attributes,
-                                                                       performed_by: Current.executed_by)
+                                            changed_attributes: changed_attributes,
+                                            performed_by: Current.executed_by)
   end
 
   def conversation_status_changed_to_open?

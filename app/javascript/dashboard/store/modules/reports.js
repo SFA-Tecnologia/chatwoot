@@ -1,9 +1,9 @@
 /* eslint no-console: 0 */
 import * as types from '../mutation-types';
 import Report from '../../api/reports';
-import { downloadCsvFile, generateFileName } from '../../helper/downloadHelper';
+import {downloadCsvFile, generateFileName} from '../../helper/downloadHelper';
 import AnalyticsHelper from '../../helper/AnalyticsHelper';
-import { REPORTS_EVENTS } from '../../helper/AnalyticsHelper/events';
+import {REPORTS_EVENTS} from '../../helper/AnalyticsHelper/events';
 import {
   reconcileHeatmapData,
   clampDataBetweenTimeline,
@@ -75,14 +75,14 @@ const getters = {
 };
 
 export const actions = {
-  fetchAccountReport({ commit }, reportObj) {
-    const { metric } = reportObj;
+  fetchAccountReport({commit}, reportObj) {
+    const {metric} = reportObj;
     commit(types.default.TOGGLE_ACCOUNT_REPORT_LOADING, {
       metric,
       value: true,
     });
     Report.getReports(reportObj).then(accountReport => {
-      let { data } = accountReport;
+      let {data} = accountReport;
       data = clampDataBetweenTimeline(data, reportObj.from, reportObj.to);
       commit(types.default.SET_ACCOUNT_REPORTS, {
         metric,
@@ -94,10 +94,10 @@ export const actions = {
       });
     });
   },
-  fetchAccountConversationHeatmap({ commit }, reportObj) {
+  fetchAccountConversationHeatmap({commit}, reportObj) {
     commit(types.default.TOGGLE_HEATMAP_LOADING, true);
-    Report.getReports({ ...reportObj, groupBy: 'hour' }).then(heatmapData => {
-      let { data } = heatmapData;
+    Report.getReports({...reportObj, groupBy: 'hour'}).then(heatmapData => {
+      let {data} = heatmapData;
       data = clampDataBetweenTimeline(data, reportObj.from, reportObj.to);
 
       data = reconcileHeatmapData(
@@ -109,7 +109,7 @@ export const actions = {
       commit(types.default.TOGGLE_HEATMAP_LOADING, false);
     });
   },
-  fetchAccountSummary({ commit }, reportObj) {
+  fetchAccountSummary({commit}, reportObj) {
     Report.getSummary(
       reportObj.from,
       reportObj.to,
@@ -125,7 +125,7 @@ export const actions = {
         commit(types.default.TOGGLE_ACCOUNT_REPORT_LOADING, false);
       });
   },
-  fetchAccountConversationMetric({ commit }, reportObj) {
+  fetchAccountConversationMetric({commit}, reportObj) {
     commit(types.default.TOGGLE_ACCOUNT_CONVERSATION_METRIC_LOADING, true);
     Report.getConversationMetric(reportObj.type)
       .then(accountConversationMetric => {
@@ -139,7 +139,7 @@ export const actions = {
         commit(types.default.TOGGLE_ACCOUNT_CONVERSATION_METRIC_LOADING, false);
       });
   },
-  fetchAgentConversationMetric({ commit }, reportObj) {
+  fetchAgentConversationMetric({commit}, reportObj) {
     commit(types.default.TOGGLE_AGENT_CONVERSATION_METRIC_LOADING, true);
     Report.getConversationMetric(reportObj.type, reportObj.page)
       .then(agentConversationMetric => {
@@ -228,13 +228,13 @@ export const actions = {
 };
 
 const mutations = {
-  [types.default.SET_ACCOUNT_REPORTS](_state, { metric, data }) {
+  [types.default.SET_ACCOUNT_REPORTS](_state, {metric, data}) {
     _state.accountReport.data[metric] = data;
   },
   [types.default.SET_HEATMAP_DATA](_state, heatmapData) {
     _state.overview.accountConversationHeatmap = heatmapData;
   },
-  [types.default.TOGGLE_ACCOUNT_REPORT_LOADING](_state, { metric, value }) {
+  [types.default.TOGGLE_ACCOUNT_REPORT_LOADING](_state, {metric, value}) {
     _state.accountReport.isFetching[metric] = value;
   },
   [types.default.TOGGLE_HEATMAP_LOADING](_state, flag) {

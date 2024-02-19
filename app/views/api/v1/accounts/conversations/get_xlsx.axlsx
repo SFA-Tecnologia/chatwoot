@@ -1,0 +1,40 @@
+wb = xlsx_package.workbook
+title_style = wb.styles.add_style(b: true, sz: 16)
+type_style = wb.styles.add_style(b: true, sz: 12)
+type_regular_style = wb.styles.add_style(sz: 12)
+wb.add_worksheet(name: "Atendimentos") do |sheet|
+  # Adding headers for the assigned agent and date range
+  sheet.add_row ["Teresa 360º"], style: title_style
+  sheet.add_row []
+  sheet.add_row []
+  sheet.add_row do |row|
+    row.add_cell "Agente:", style: type_style
+    row.add_cell @assigned_agent_name || '---', style: type_regular_style
+  end
+  sheet.add_row do |row|
+    row.add_cell "Data:", style: type_style
+    row.add_cell @date_range || '---', style: type_regular_style
+  end
+  sheet.add_row do |row|
+    row.add_cell "Total de Atendimentos:", style: type_style
+    row.add_cell @total_conversations || '---' , style: type_regular_style
+  end
+
+  # Adding an empty row for spacing (optional)
+  sheet.add_row []
+  sheet.add_row ["Nome do Usuário", "Protocolo", "Data de Chegada", "Data de Atendimento", "Status"], style: type_style
+  @conversations.each do |conversation|
+      protocolo = conversation.additional_attributes['protocolo'] || '---'
+      created_at_formatted = conversation.created_at.in_time_zone('America/Sao_Paulo') || '---'
+      first_reply_at_formatted = conversation.first_reply_created_at.in_time_zone('America/Sao_Paulo') || '---'
+      status_text = I18n.t("chat_list.chat_status_filter_items.#{conversation.status}.text")
+
+      sheet.add_row [
+        conversation.contact.name,
+        protocolo,
+        created_at_formatted,
+        first_reply_at_formatted,
+        status_text
+      ]
+    end
+end

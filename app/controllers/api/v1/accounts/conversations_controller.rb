@@ -1,15 +1,58 @@
 class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseController
   include Events::Types
+  include Sift
   include DateRangeHelper
   include HmacConcern
 
-  before_action :conversation, except: [:index, :meta, :search, :create, :filter]
+  before_action :conversation, except: [:index, :meta, :search, :create, :filter, :get_conversations_by_assignee, :download_xlsx, :download_pdf]
   before_action :inbox, :contact, :contact_inbox, only: [:create]
+
+  sort_on :created_at, type: :datetime
 
   def index
     result = conversation_finder.perform
     @conversations = result[:conversations]
     @conversations_count = result[:count]
+  end
+
+  def get_assigned_agent_name(user_ids)
+    return nil if user_ids.blank?
+
+    # Assuming user_ids is an array of IDs
+    users = User.where(id: user_ids)
+
+    # Combine the names of the users. Adjust according to your User model attributes.
+    users.pluck(:name).join(', ')
+  end
+
+  def get_conversations_by_assignee
+
+    base_query = Current.account.conversations.includes(:contact, :assignee)
+
+    conversations = filtrate(base_query).filter_by_created_at(range)
+                                        .filter_by_assigned_agent_id(params[:user_ids])
+                                        .filter_by_inbox_id(params[:inbox_id])
+                                        .order(:created_at).reverse_order
+
+    conversations = conversations.page(params[:page] || 1).per(params[:per_page] || 25)
+
+    if conversations.any?
+      render json: {
+        conversations: conversations.as_json(include: {
+          contact: {
+            only: [:id, :name, :email], # Adjust the fields as necessary
+          },
+          assignee: {
+            only: [:id, :name, :email], # Adjust the fields as necessary
+          }
+        }),
+        total_pages: conversations.total_pages,
+        current_page: conversations.current_page,
+        total_count: conversations.total_count
+      }, status: :ok
+    else
+      render json: { message: 'No conversations available' }, status: :no_content
+    end
   end
 
   def meta
@@ -50,6 +93,63 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
   def unmute
     @conversation.unmute!
     head :ok
+  end
+
+  def can_be_updated_by
+    conversation = Conversation.find(params[:id])
+    can_update = conversation.can_be_updated_by?(Current.user&.id)
+
+    render json: { can_be_updated_by: can_update }
+  end
+
+  def download_xlsx
+    base_query = Current.account.conversations.includes(:contact, :assignee)
+
+    @conversations = filtrate(base_query).filter_by_created_at(range)
+                                         .filter_by_assigned_agent_id(params[:user_ids])
+                                         .filter_by_inbox_id(params[:inbox_id])
+                                         .order(:created_at).reverse_order
+
+    # Assuming you have a method or a way to get the assigned agent's name
+    @assigned_agent_name = get_assigned_agent_name(params[:user_ids])
+
+    @total_conversations = @conversations.count
+
+    # Passing the date range
+    start_date = range.begin
+    end_date = range.end - 1.day
+
+    formatted_start_date = start_date.strftime('%d/%m/%Y')
+    formatted_end_date = end_date.strftime('%d/%m/%Y')
+
+    @date_range = "#{formatted_start_date} - #{formatted_end_date}"
+
+    render xlsx: 'download_xlsx', template: '/api/v1/accounts/conversations/get_xlsx', filename: 'relatorio.xlsx', disposition: 'attachment'
+  end
+
+  def download_pdf
+    base_query = Current.account.conversations.includes(:contact, :assignee)
+
+    @conversations = filtrate(base_query).filter_by_created_at(range)
+                                         .filter_by_assigned_agent_id(params[:user_ids])
+                                         .filter_by_inbox_id(params[:inbox_id])
+                                         .order(:created_at).reverse_order
+
+    # Assuming you have a method or a way to get the assigned agent's name
+    @assigned_agent_name = get_assigned_agent_name(params[:user_ids])
+
+    @total_conversations = @conversations.count
+
+    # Passing the date range
+    start_date = range.begin
+    end_date = range.end - 1.day
+
+    formatted_start_date = start_date.strftime('%d/%m/%Y')
+    formatted_end_date = end_date.strftime('%d/%m/%Y')
+
+    @date_range = "#{formatted_start_date} - #{formatted_end_date}"
+
+    render pdf: 'relatorio', template: 'api/v1/accounts/conversations/conversations', formats: [:html], orientation: "Landscape", disposition: 'attachment'
   end
 
   def transcript

@@ -5,6 +5,7 @@
     @keyup.esc="onCloseDropdown"
   >
     <woot-button
+      :class="{ 'dropdown-disabled': disabled }"
       variant="hollow"
       color-scheme="secondary"
       class="w-full border border-solid border-slate-200 dark:border-slate-700 px-2.5 hover:border-slate-75 dark:hover:border-slate-600"
@@ -107,6 +108,10 @@ export default {
       type: String,
       default: 'Search',
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -123,7 +128,9 @@ export default {
   },
   methods: {
     toggleDropdown() {
-      this.showSearchDropdown = !this.showSearchDropdown;
+      if (!this.disabled) { // Check if not disabled before toggling
+        this.showSearchDropdown = !this.showSearchDropdown;
+      }
     },
 
     onCloseDropdown() {
@@ -140,5 +147,10 @@ export default {
 <style lang="scss" scoped>
 .dropdown-pane {
   @apply box-border top-[2.625rem] w-full;
+}
+.dropdown-disabled {
+  @apply bg-slate-100 dark:bg-slate-800 cursor-not-allowed;
+  pointer-events: none; /* Prevent clicking */
+  opacity: 0.6; /* Optional: visual indication that it's disabled */
 }
 </style>

@@ -79,7 +79,11 @@ Rails.application.routes.draw do
               get :meta
               get :search
               post :filter
-            end
+              get :get_conversations_by_assignee
+              get :download_xlsx
+              get :download_pdf
+
+              end
             scope module: :conversations do
               resources :messages, only: [:index, :create, :destroy] do
                 member do
@@ -102,6 +106,7 @@ Rails.application.routes.draw do
               post :unread
               post :custom_attributes
               get :attachments
+              get :can_be_updated_by
             end
           end
 
