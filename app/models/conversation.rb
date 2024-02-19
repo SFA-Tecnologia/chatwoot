@@ -166,13 +166,13 @@ class Conversation < ApplicationRecord
     return true if self.assignee_id == current_agent_id
 
     # If assigned_at is nil and current_agent_id is also nil, return true
-    return true if self.assigned_at.nil? && current_agent_id.nil?
+    return false if self.assigned_at.nil? && current_agent_id.nil?
 
     # If assigned_at is not nil, check if the current time is more than 3 hours past assigned_at
     return Time.current > self.assigned_at + 3.hours if self.assigned_at
 
     # If none of the above conditions are met, return false
-    true
+    false
   end
 
   def toggle_priority(priority = nil)
