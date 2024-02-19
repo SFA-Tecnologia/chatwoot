@@ -162,9 +162,17 @@ class Conversation < ApplicationRecord
   end
 
   def can_be_updated_by?(current_agent_id)
+    # If the assignee_id matches the current_agent_id, return true
     return true if self.assignee_id == current_agent_id
+
+    # If assigned_at is nil and current_agent_id is also nil, return true
+    return true if self.assigned_at.nil? && current_agent_id.nil?
+
+    # If assigned_at is not nil, check if the current time is more than 3 hours past assigned_at
     return Time.current > self.assigned_at + 3.hours if self.assigned_at
-    false
+
+    # If none of the above conditions are met, return false
+    true
   end
 
   def toggle_priority(priority = nil)
