@@ -13,7 +13,8 @@ Rails.application.configure do
   # Config related to smtp
   smtp_settings = {
     address: ENV.fetch('SMTP_ADDRESS', 'localhost'),
-    port: ENV.fetch('SMTP_PORT', 587)
+    port: ENV.fetch('SMTP_PORT', 587),
+    read_timeout: 500 # Increase the timeout value to avoid timeout errors
   }
 
   smtp_settings[:authentication] = ENV.fetch('SMTP_AUTHENTICATION', 'login').to_sym if ENV['SMTP_AUTHENTICATION'].present?
