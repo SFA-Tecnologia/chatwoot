@@ -169,7 +169,7 @@ class Conversation < ApplicationRecord
     return true if self.assigned_at.nil? && current_agent_id.nil?
 
     # If assigned_at is not nil, check if the current time is more than 3 hours past assigned_at
-    return Time.current > self.assigned_at + 3.hours if self.assigned_at
+    return Time.current > self.assigned_at + 1.hours if self.assigned_at
 
     # If none of the above conditions are met, return false
     true
