@@ -1,69 +1,77 @@
 <template>
   <div
-      class="flex flex-wrap mx-0 bg-white dark:bg-slate-800 rounded-[4px] p-4 mb-5 border border-solid border-slate-75 dark:border-slate-700"
+    class="flex flex-wrap flex-col mx-0 bg-white dark:bg-slate-800 rounded-[4px] p-4 mb-5 border border-solid border-slate-75 dark:border-slate-700"
   >
-    <h4 class="mb-0">{{ this.$t('CSAT_REPORTS.TABLE.HEADER.RATING') }} </h4>
-    <div
+
+      <h4 class="mb-0">{{ $t('CSAT_REPORTS.TABLE.HEADER.RATING') }}</h4>
+      <div
         v-if="metrics.totalResponseCount && !ratingFilterEnabled"
         class="w-[50%] max-w-[50%] flex-[50%] report-card rtl:[direction:initial]"
-    >
-      <h3 class="heading text-slate-800 dark:text-slate-100">
+      >
+        <h3 class="heading text-slate-800 dark:text-slate-100">
         <div class="flex justify-end flex-row-reverse">
           <div
-              v-for="(rating, key, index) in ratingPercentage"
-              :key="rating + key + index"
-              class="pl-4"
+            v-for="(rating, key, index) in ratingPercentage"
+            :key="rating + key + index"
+            class="pl-4"
           >
             <span class="my-0 mx-0.5">{{ ratingToEmoji(key) }}</span>
             <span>{{ formatToPercent(rating) }}</span>
           </div>
         </div>
-      </h3>
-      <div class="mt-2">
-        <woot-horizontal-bar :collection="chartData" :height="24"/>
+        </h3>
+        <div class="mt-2">
+          <woot-horizontal-bar :collection="chartData" :height="24" />
+        </div>
       </div>
-    </div>
-    <div v-if="metrics.totalResponseCount" class="medium-6 report-card">
-      <h4 class="rating--title">{{ this.$t('CSAT_REPORTS.TABLE.HEADER.RATING_TECHNOLOGY') }} </h4>
-      <h3 class="heading">
-        <div class="emoji--distribution">
+
+    <h4 class="mb-0">
+      {{ $t('CSAT_REPORTS.TABLE.HEADER.RATING_TECHNOLOGY') }}
+    </h4>
+    <div
+      v-if="metrics.totalResponseCount"
+      class="w-[50%] max-w-[50%] flex-[50%] report-card rtl:[direction:initial]"
+    >
+
+      <h3 class="heading text-slate-800 dark:text-slate-100">
+        <div class="flex justify-end flex-row-reverse">
           <div
-              v-for="(rating_technology, key, index) in ratingTechPercentage"
-              :key="rating_technology + key + index"
-              class="emoji--distribution-item"
+            v-for="(rating_technology, key, index) in ratingTechPercentage"
+            :key="rating_technology + key + index"
+            class="pl-4"
           >
-            <span class="emoji--distribution-key"><b>{{
-                csatRatings[key - 1].value
-              }}</b>:</span>
+            <span class="my-0 mx-0.5"><b>{{ csatRatings[key - 1].value }}</b></span>
             <span>{{ formatToPercent(rating_technology) }}</span>
           </div>
         </div>
       </h3>
-      <div class="emoji--distribution-chart">
-        <woot-horizontal-bar :collection="chartTechData" :height="24"/>
+      <div class="mt-2">
+        <woot-horizontal-bar :collection="chartTechData" :height="24" />
       </div>
     </div>
-    <csat-metric-card
+    <div class="flex flex-wrap flex-row">
+      <csat-metric-card
         :label="$t('CSAT_REPORTS.METRIC.TOTAL_RESPONSES.LABEL')"
         :info-text="$t('CSAT_REPORTS.METRIC.TOTAL_RESPONSES.TOOLTIP')"
         :value="responseCount"
-    />
-    <csat-metric-card
+      />
+      <csat-metric-card
         :label="$t('CSAT_REPORTS.METRIC.SATISFACTION_SCORE.LABEL')"
         :info-text="$t('CSAT_REPORTS.METRIC.SATISFACTION_SCORE.TOOLTIP')"
         :value="formatToPercent(satisfactionScore)"
-    />
-    <csat-metric-card
+      />
+      <csat-metric-card
         :label="$t('CSAT_REPORTS.METRIC.RESPONSE_RATE.LABEL')"
         :info-text="$t('CSAT_REPORTS.METRIC.RESPONSE_RATE.TOOLTIP')"
         :value="formatToPercent(responseRate)"
-    />
+      />
+    </div>
   </div>
 </template>
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 import CsatMetricCard from './CsatMetricCard.vue';
-import {CSAT_RATINGS} from 'shared/constants/messages';
+import { CSAT_RATINGS } from 'shared/constants/messages';
 
 export default {
   components: {
@@ -104,18 +112,18 @@ export default {
     },
     responseCount() {
       return this.metrics.totalResponseCount
-          ? this.metrics.totalResponseCount.toLocaleString()
-          : '--';
+        ? this.metrics.totalResponseCount.toLocaleString()
+        : '--';
     },
     chartTechData() {
-        return {
-            labels: ['Rating'],
-            datasets: CSAT_RATINGS.map((rating, index) => ({
-                label: rating.value,
-                data: [this.ratingTechPercentage[index + 1]],
-                backgroundColor: rating.color,
-            })),
-        }
+      return {
+        labels: ['Rating'],
+        datasets: CSAT_RATINGS.map((rating, index) => ({
+          label: rating.value,
+          data: [this.ratingTechPercentage[index + 1]],
+          backgroundColor: rating.color,
+        })),
+      };
     },
   },
   methods: {

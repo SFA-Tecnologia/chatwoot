@@ -22,7 +22,7 @@ wb.add_worksheet(name: "Atendimentos") do |sheet|
 
   # Adding an empty row for spacing (optional)
   sheet.add_row []
-  sheet.add_row ["Nome do Usuário", "Protocolo", "Data de Chegada", "Data de Atendimento", "Status"], style: type_style
+  sheet.add_row ["Nome do Agente", "Protocolo", "Data de Chegada", "Data de Atendimento", "Status"], style: type_style
   @conversations.each do |conversation|
       protocolo = conversation.additional_attributes['protocolo'] || '---'
       created_at_formatted = conversation.created_at&.in_time_zone('America/Sao_Paulo') || '---'

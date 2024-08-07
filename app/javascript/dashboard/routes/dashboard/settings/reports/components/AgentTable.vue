@@ -6,6 +6,7 @@
         :border-around="true"
         :columns="columns"
         :table-data="tableData"
+        :sort-option="sortChange"
     />
     <div v-show="conversationsResponses.total_count === 0" class="csat--empty-records">
       {{ $t('CSAT_REPORTS.NO_RECORDS') }}
@@ -45,7 +46,7 @@ export default {
     }),
     columns() {
       return [
-        {field: "username", key: "username", title: "Nome do Usuário", align: "left"},
+        {field: "username", key: "username", title: "Nome do Agente", align: "left"},
         {
           field: "protocolo",
           key: "protocolo",
@@ -57,12 +58,14 @@ export default {
           key: "datachegada",
           title: "Data de Chegada",
           align: "center",
+          sortBy: "",
         },
         {
           field: "dataatendimento",
           key: "dataatendimento",
           title: "Data de Atendimento",
           align: "center",
+          sortBy: "",
         },
         {
           field: "status",
@@ -87,16 +90,23 @@ export default {
       this.$emit('page-change', pageIndex);
     },
     sortChange(params) {
+      console.info(params);
       this.tableData.sort((a, b) => {
-        if (params.protocolo) {
-          if (params.protocolo === "asc") {
-            return a.protocolo - b.protocolo;
-          } else if (params.protocolo === "desc") {
-            return b.protocolo - a.protocolo;
-          } else {
-            return 0;
-          }
+        let aValue = a[params.key];
+        let bValue = b[params.key];
+
+        if (params.key === 'datachegada' || params.key === 'dataatendimento') {
+          aValue = new Date(aValue).getTime();
+          bValue = new Date(bValue).getTime();
         }
+
+        if (params.order === 'asc') {
+          return aValue - bValue;
+        }
+        if (params.order === 'desc') {
+          return bValue - aValue;
+        }
+        return 0;
       });
     },
   },
