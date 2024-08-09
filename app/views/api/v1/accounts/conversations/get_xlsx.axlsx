@@ -31,7 +31,7 @@ wb.add_worksheet(name: "Atendimentos") do |sheet|
       status_text = I18n.t("chat_list.chat_status_filter_items.#{conversation.status}.text")
 
       sheet.add_row [
-        conversation.contact.name,
+        agente,
         protocolo,
         created_at_formatted,
         first_reply_at_formatted,
