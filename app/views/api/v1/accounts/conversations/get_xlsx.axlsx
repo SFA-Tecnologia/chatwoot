@@ -24,6 +24,7 @@ wb.add_worksheet(name: "Atendimentos") do |sheet|
   sheet.add_row []
   sheet.add_row ["Nome do Agente", "Protocolo", "Data de Chegada", "Data de Atendimento", "Status"], style: type_style
   @conversations.each do |conversation|
+      agente = conversation.assignee.name || '---'
       protocolo = conversation.additional_attributes['protocolo'] || '---'
       created_at_formatted = conversation.created_at&.in_time_zone('America/Sao_Paulo') || '---'
       first_reply_at_formatted = conversation.first_reply_created_at&.in_time_zone('America/Sao_Paulo') || '---'
