@@ -6,7 +6,6 @@
         :border-around="true"
         :columns="columns"
         :table-data="tableData"
-        :sort-option="sortChange"
     />
     <div v-show="conversationsResponses.total_count === 0" class="csat--empty-records">
       {{ $t('CSAT_REPORTS.NO_RECORDS') }}
@@ -58,14 +57,12 @@ export default {
           key: "datachegada",
           title: "Data de Chegada",
           align: "center",
-          sortBy: "",
         },
         {
           field: "dataatendimento",
           key: "dataatendimento",
           title: "Data de Atendimento",
           align: "center",
-          sortBy: "",
         },
         {
           field: "status",
@@ -77,7 +74,7 @@ export default {
     },
     tableData() {
       return this.conversationsResponses.conversations.map(conversation => ({
-        username: conversation.contact.name,
+        username: conversation.assignee?.name || '---',
         protocolo: conversation.additional_attributes.protocolo || '---',
         datachegada: new Date(conversation.created_at).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
         dataatendimento: conversation.first_reply_created_at ? new Date(conversation.first_reply_created_at).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : '---',
@@ -88,26 +85,6 @@ export default {
   methods: {
     onPageNumberChange(pageIndex) {
       this.$emit('page-change', pageIndex);
-    },
-    sortChange(params) {
-      console.info(params);
-      this.tableData.sort((a, b) => {
-        let aValue = a[params.key];
-        let bValue = b[params.key];
-
-        if (params.key === 'datachegada' || params.key === 'dataatendimento') {
-          aValue = new Date(aValue).getTime();
-          bValue = new Date(bValue).getTime();
-        }
-
-        if (params.order === 'asc') {
-          return aValue - bValue;
-        }
-        if (params.order === 'desc') {
-          return bValue - aValue;
-        }
-        return 0;
-      });
     },
   },
 };
