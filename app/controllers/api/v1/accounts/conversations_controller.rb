@@ -32,7 +32,7 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
     conversations = filtrate(base_query).filter_by_created_at(range)
                                         .filter_by_assigned_agent_id(params[:user_ids])
                                         .filter_by_inbox_id(params[:inbox_id])
-                                        .order(:created_at).reverse_order
+                                        .reorder(:first_reply_created_at)
 
     conversations = conversations.page(params[:page] || 1).per(params[:per_page] || 25)
 
@@ -108,7 +108,7 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
     @conversations = filtrate(base_query).filter_by_created_at(range)
                                          .filter_by_assigned_agent_id(params[:user_ids])
                                          .filter_by_inbox_id(params[:inbox_id])
-                                         .order(:created_at).reverse_order
+                                         .order(:first_reply_created_at).reverse_order
 
     # Assuming you have a method or a way to get the assigned agent's name
     @assigned_agent_name = get_assigned_agent_name(params[:user_ids])
@@ -133,7 +133,7 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
     @conversations = filtrate(base_query).filter_by_created_at(range)
                                          .filter_by_assigned_agent_id(params[:user_ids])
                                          .filter_by_inbox_id(params[:inbox_id])
-                                         .order(:created_at).reverse_order
+                                         .order(:first_reply_created_at).reverse_order
 
     # Assuming you have a method or a way to get the assigned agent's name
     @assigned_agent_name = get_assigned_agent_name(params[:user_ids])

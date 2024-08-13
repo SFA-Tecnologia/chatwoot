@@ -1,22 +1,23 @@
 <template>
   <div class="csat--table-container">
     <ve-table
-        max-height="calc(100vh - 21.875rem)"
-        :fixed-header="true"
-        :border-around="true"
-        :columns="columns"
-        :table-data="tableData"
+      max-height="calc(100vh - 21.875rem)"
+      :fixed-header="true"
+      :border-around="true"
+      :columns="columns"
+      :table-data="tableData"
+      :sort-option="sortOption"
     />
     <div v-show="conversationsResponses.total_count === 0" class="csat--empty-records">
       {{ $t('CSAT_REPORTS.NO_RECORDS') }}
     </div>
     <div class="table-pagination">
       <ve-pagination
-          :total="conversationsResponses.total_count"
-          :page-index="pageIndex"
-          :page-size="25"
-          :page-size-option="[25]"
-          @on-page-number-change="onPageNumberChange"
+        :total="conversationsResponses.total_count"
+        :page-index="pageIndex"
+        :page-size="25"
+        :page-size-option="[25]"
+        @on-page-number-change="onPageNumberChange"
       />
     </div>
   </div>
@@ -39,6 +40,15 @@ export default {
       default: 1,
     },
   },
+  data() {
+    return {
+      sortOption: {
+        sortChange: params => {
+          this.sortChange(params);
+        },
+      },
+    };
+  },
   computed: {
     ...mapGetters({
       conversationsResponses: 'conversationReport/getConversations',
@@ -57,12 +67,15 @@ export default {
           key: "datachegada",
           title: "Data de Chegada",
           align: "center",
+          sortBy: "",
         },
         {
           field: "dataatendimento",
           key: "dataatendimento",
           title: "Data de Atendimento",
           align: "center",
+          sortBy: "asc",
+          sortBy: "asc",
         },
         {
           field: "status",
@@ -85,6 +98,25 @@ export default {
   methods: {
     onPageNumberChange(pageIndex) {
       this.$emit('page-change', pageIndex);
+    },
+    sortChange(params) {
+      const sortField = Object.keys(params).find(key => params[key] !== '');
+      const sortOrder = params[sortField];
+
+      if (sortField) {
+        this.tableData.sort((a, b) => {
+          const x = new Date(a[sortField]).getTime();
+          const y = new Date(b[sortField]).getTime();
+
+          if (sortOrder === 'asc') {
+            return x - y;
+          }
+          if (sortOrder === 'desc') {
+            return y - x;
+          }
+          return 0;
+        });
+      }
     },
   },
 };
